@@ -59,10 +59,10 @@ def get_record():
 if __name__ == '__main__':
     article_comment, article, excel = get_record()
     # article存储路径
-    article_path = "/Users/red/Desktop/temp/news/data/sina_data/article_txt"
+    article_path = "/Users/red/Desktop/temp/news/data/sj_data/sina_data/article_txt"
     doc.path_exists(article_path)
     # article_comment存储路径
-    article_comment_path = "/Users/red/Desktop/temp/news/data/sina_data/article_comment_txt"
+    article_comment_path = "/Users/red/Desktop/temp/news/data/sj_data/sina_data/article_comment_txt"
     doc.path_exists(article_comment_path)
 
     for i in range(len(excel)):
@@ -72,5 +72,5 @@ if __name__ == '__main__':
     print('[{}]--file write finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     title = ['文件编号', 'url', '时间', '话题']
-    xlwt_util.save_xlwt(4, 'sheet1', title, excel, '/Users/red/Desktop/temp/news/data/sina_data/index.xls')
+    xlwt_util.save_xlwt(4, 'sheet1', title, excel, '/Users/red/Desktop/temp/news/data/sj_data/sina_data/index.xls')
     print('[{}]--excel write finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))

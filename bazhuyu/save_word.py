@@ -4,7 +4,7 @@
 @Time    : 2019-01-11 13:37
 @Author  : red
 @Site    : 
-@File    : save_bazhuayu_word.py
+@File    : bazhuyu.py
 @Software: PyCharm
 """
 from utils import sql_util as sql
