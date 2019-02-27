@@ -60,11 +60,11 @@ def tianya_data():
 
     article = []
     comment = []
-    result = sql.queryall("select * from tianya limit %s", 100)
+    result = sql.queryall("select * from tianya where question_link <> '[]' limit %s", 200)
     for item1 in result:
         article_id = str(uuid.uuid4())
         temp = [article_id, item1.get('question_title'), item1.get('get_time'), item1.get('question_detail'),
-                item1.get('question_author'), item1.get('question_publish_time'), item1.get('question_topics')]
+                item1.get('question_author'), item1.get('question_publish_time'), item1.get('question_topics'), item1.get('question_link')]
 
         article.append(temp)
         for item in json.loads(item1.get('question_answer')):
@@ -75,8 +75,8 @@ def tianya_data():
     print("[{}]--data integration finally!".format(time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())))
     # 添加数据到数据库
     insert_article_sql = 'insert into sj_tianya_article(id, question_title, get_time, question_detail,' \
-                         ' question_author, question_publish_time, question_topics)' \
-                         ' values(%s, %s, %s, %s, %s, %s, %s)'
+                         ' question_author, question_publish_time, question_topics, question_link)' \
+                         ' values(%s, %s, %s, %s, %s, %s, %s, %s)'
     insert_comment_sql = 'insert into sj_tianya_comment(id, article_id, question_answer_content, ' \
                          'question_answer_author, question_answer_agree_count, question_answer_publish_time)' \
                          ' values(%s, %s, %s, %s, %s, %s)'
@@ -90,5 +90,5 @@ def tianya_data():
 
 
 if __name__ == '__main__':
-    sina_data()
-    # tianya_data()
+    # sina_data()
+    tianya_data()
