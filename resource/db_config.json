@@ -1,7 +1,7 @@
 {
-  "host": "112.74.36.53",
-  "user": "root",
-  "password": "redli9600,.0@",
+  "host": "",
+  "user": "",
+  "password": "",
   "db": "news",
   "charset": "utf8mb4",
   "port": 3306,
