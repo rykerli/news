@@ -60,7 +60,7 @@ def tianya_data():
 
     article = []
     comment = []
-    result = sql.queryall("select * from tianya where question_link <> '[]' limit %s", 200)
+    result = sql.queryall("select * from tianya where question_link <> '[]' and length(question_detail)>75 limit %s", 200)
     for item1 in result:
         article_id = str(uuid.uuid4())
         temp = [article_id, item1.get('question_title'), item1.get('get_time'), item1.get('question_detail'),
