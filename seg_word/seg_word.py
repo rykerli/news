@@ -16,7 +16,7 @@ import threading
 from utils import sql_util
 
 # 开启并行分词模式，参数为并行进程数
-jieba.enable_parallel(4)
+# jieba.enable_parallel(4)
 
 
 def get_file_path(section, key):
