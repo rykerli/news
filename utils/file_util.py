@@ -10,5 +10,10 @@
 
 
 def write_file(file_path, content):
-    with open(file_path, 'w', encoding='utf8') as w:
-        w.write(content)
+	with open(file_path, 'w', encoding='utf8') as w:
+		w.write(content)
+
+
+def append_file(file_path, content):
+	with open(file_path, 'a', encoding='utf8') as w:
+		w.write(content)

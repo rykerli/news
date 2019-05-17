@@ -20,8 +20,8 @@ def get_record():
     article_comment = []
     article = []
     excel = []
-    num = sql.queryone("select count(*) from sj_tianya_article")
     step = 100
+    num = sql.queryone("select count(*) from sj_tianya_article")
     count = 0
     sum = 0
     for i in range(int(num / step)):
