@@ -39,10 +39,12 @@ def get_all_data():
 				array2.append(article_id)
 				array2.append(str(uuid.uuid4()))
 				comment.append(array2)
+	print('[{}]--process data finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 	return article, comment
 
 
 def install_sql():
+	print('[{}]--install sql start'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 	article, comment = get_all_data()
 	sql_str1 = "truncate table bzy_sohu_article"
 	sql_str2 = "truncate table bzy_sohu_comment"
@@ -54,6 +56,7 @@ def install_sql():
 				  "values (%s, %s, %s, %s)"
 	sql.insertmany(sql_article, article)
 	sql.insertmany(sql_comment, comment)
+	print('[{}]--install sql end'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
 
 if __name__ == '__main__':
