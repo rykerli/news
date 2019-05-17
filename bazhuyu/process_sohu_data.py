@@ -17,9 +17,16 @@ def get_all_data():
 	print('[{}]--get data group by title'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 	article = []
 	comment = []
+	data_sum = 0
 	for title in title_lst:
+		data_sum += 1
 		array1 = []
 		lst = sql.queryall("select * from bzy_sohu_origin_data where title = %s", title)
+		if data_sum % 100 == 0:
+			print('[{}]--{} data title process, lst data is {}'.format(time.strftime("%Y-%m-%d %H:%M:%S",
+																					 time.localtime()), data_sum,
+																	   len(lst)))
+
 		article_id = str(uuid.uuid4())
 		array1.append(article_id)
 		array1.append(lst[0].get('title'))
