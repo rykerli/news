@@ -208,6 +208,8 @@ def simple_value(row):
 
 
 if __name__ == '__main__':
+    pass
+
     # print("hello everyone!!!")
     #
     # # print("删表:", execute('drop table test'))
@@ -236,7 +238,7 @@ if __name__ == '__main__':
     # print("插入数据:", insertmany(sql_str, arrays))
 
     # 查询
-    print("只取一行:", queryone("select content from origin_data limit %s,%s", (0, 1)))  # 尽量使用limit
+    # print("只取一行:", queryone("select content from origin_data limit %s,%s", (0, 1)))  # 尽量使用limit
     # print("查询全表:", queryall("select * from test_users"))
     #
     # # 条件查询
