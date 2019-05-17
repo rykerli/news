@@ -34,7 +34,7 @@ def get_data():
 			sina_excel_temp = [txt_id, item.get('url'), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(item.get(
 				'time'))),
 							   item.get('topic')]
-			sina_temp = [item.get('post_content_txt')]
+			sina_temp = [item.get('post_content_txt'), txt_id]
 
 			sina_comment_array = sql.queryall("select * from sj_sina_comment where article_id = %s", item.get('id'))
 			sina_temp_filter = ''
@@ -71,7 +71,7 @@ def get_data():
 			ty_excel_temp = [txt_id, item.get('question_link'),
 							 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(item.get('question_publish_time')))),
 							 item.get('question_topics')]
-			ty_temp = [item.get('question_detail')]
+			ty_temp = [item.get('question_detail'), txt_id]
 
 			ty_comment_array = sql.queryall("select * from sj_tianya_comment where article_id = %s", item.get('id'))
 			ty_temp_filter = ''
@@ -108,7 +108,7 @@ def get_data():
 			sohu_excel_temp = [txt_id, item.get('article_link'),
 							   time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(item.get('time'))),
 							   item.get('article_category')]
-			sohu_temp = [filters.stripTagSimple(item.get('article_content'))]
+			sohu_temp = [filters.stripTagSimple(item.get('article_content')), txt_id]
 			#  只有文章
 			sohu_article.append(sohu_temp)
 
@@ -127,16 +127,22 @@ def save_data():
 
 	# article存储路径
 	article_path = "/Users/red/Desktop/temp/news/data/sj_data/all_data/article_txt.txt"
+	article_docx_path = "/Users/red/Desktop/temp/news/data/sj_data/all_data/article.docx"
 	# doc.path_exists(article_path)
 	# article_comment存储路径
 	article_comment_path = "/Users/red/Desktop/temp/news/data/sj_data/all_data/article_comment_txt.txt"
+	article_comment_docx_path = "/Users/red/Desktop/temp/news/data/sj_data/all_data/article_comment.docx"
 	# doc.path_exists(article_comment_path)
 
 	# sina数据保存
 	for i in range(len(sina_excel)):
+		file_util.append_file(article_path, sina_article[i][1] + '\n\n')
 		file_util.append_file(article_path, sina_article[i][0] + '\n\n')
+		file_util.append_file(article_path, '\n\n')
+		file_util.append_file(article_comment_path, sina_article_comment[i][1] + '\n\n')
 		file_util.append_file(article_comment_path,
-							  str(sina_article_comment[i][0]) + '\n\n' + str(sina_article_comment[i][1]))
+							  str(sina_article_comment[i][0]) + '\n\n' + str(sina_article_comment[i][2]))
+		file_util.append_file(article_comment_path, '\n\n')
 	print('[{}]--sina file write finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 	title = ['文件编号', 'url', '时间', '话题']
 	xlwt_util.save_xlwt(4, 'sheet1', title, sina_excel,
@@ -145,9 +151,13 @@ def save_data():
 
 	# tianya数据保存
 	for i in range(len(ty_excel)):
+		file_util.append_file(article_path, ty_article[i][1] + '\n\n')
 		file_util.append_file(article_path, ty_article[i][0] + '\n\n')
+		file_util.append_file(article_path, '\n\n')
+		file_util.append_file(article_comment_path, ty_article_comment[i][1] + '\n\n')
 		file_util.append_file(article_comment_path,
-							  str(ty_article_comment[i][0]) + '\n\n' + str(ty_article_comment[i][1]))
+							  str(ty_article_comment[i][0]) + '\n\n' + str(ty_article_comment[i][2]))
+		file_util.append_file(article_comment_path, '\n\n')
 	print('[{}]--tianya file write finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 	title = ['文件编号', 'url', '时间', '话题']
 	xlwt_util.save_xlwt(4, 'sheet1', title, ty_excel,
@@ -158,15 +168,23 @@ def save_data():
 	# article存储路径
 
 	for i in range(len(sohu_excel)):
+		file_util.append_file(article_path, sohu_article[i][1] + '\n\n')
 		file_util.append_file(article_path, sohu_article[i][0] + '\n\n')
+		file_util.append_file(article_path, '\n\n')
+		file_util.append_file(article_comment_path, sohu_article_comment[i][1] + '\n\n')
 		file_util.append_file(article_comment_path,
 							  str(sohu_article_comment[i][0]) + '\n\n')
+		file_util.append_file(article_comment_path, '\n\n')
 	print('[{}]--sohu file write finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
 	title = ['文件编号', 'url', '时间', '分类']
 	xlwt_util.save_xlwt(4, 'sheet1', title, sohu_excel,
 						'/Users/red/Desktop/temp/news/data/sj_data/all_data/sj_data_index/sohu_index.xls')
 	print('[{}]--sohu excel write finally'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+
+	# 将txt导入word
+	doc.save_content_to_docx(article_docx_path, file_util.read_file(article_path))
+	doc.save_content_to_docx(article_comment_docx_path, file_util.read_file(article_comment_path))
 
 
 if __name__ == '__main__':
