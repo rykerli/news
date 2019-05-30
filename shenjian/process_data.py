@@ -22,7 +22,8 @@ def sina_data():
 	article = []
 	comment = []
 	result = sql.queryall(
-		"select * from sj_sina where isLongText = 'False' and is_repost = 'false' and comments <> '[]' limit %s", 200)
+		# "select * from sj_sina where isLongText = 'False' and is_repost = 'false' and comments <> '[]' limit %s", 200)
+		"select * from sj_sina")
 	for item1 in result:
 		article_id = str(uuid.uuid4())
 		temp = [article_id, item1.get('url'), item1.get('post_time'), item1.get('nickname'), item1.get('post_time'),
@@ -60,8 +61,9 @@ def tianya_data():
 
 	article = []
 	comment = []
-	result = sql.queryall("select * from sj_tianya where question_link <> '[]' and length(question_detail)>75 limit %s",
-						  200)
+	# result = sql.queryall("select * from sj_tianya where question_link <> '[]' and length(question_detail)>75 limit %s",
+	# 					  200)
+	result = sql.queryall("select * from sj_tianya")
 	for item1 in result:
 		article_id = str(uuid.uuid4())
 		temp = [article_id, item1.get('question_title'), item1.get('get_time'), item1.get('question_detail'),
@@ -92,5 +94,5 @@ def tianya_data():
 
 
 if __name__ == '__main__':
-	# sina_data()
+	sina_data()
 	tianya_data()
