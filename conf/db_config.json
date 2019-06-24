@@ -1,9 +1,0 @@
-{
-  "host": "112.74.36.53",
-  "user": "root",
-  "password": "redli9600,.0@",
-  "db": "news",
-  "charset": "utf8mb4",
-  "port": 3306,
-  "use_unicode": true
-}
