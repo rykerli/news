@@ -51,11 +51,11 @@ def split(stop_lists, data):
 				and '\u4e00' <= word <= '\u9fff':
 			word_list.append(word)
 	for element in word_list:
-		file_util.append_file("/Users/red/Desktop/temp/news/data/sj_data/all_seg_word_data.txt", element + " ")
+		file_util.append_file("/Users/red/Desktop/temp/news/data/sj_data/all_data/all_seg_word_data.txt", element + " ")
 
 
 def get_content():
-	return file_util.read_file("/Users/red/Desktop/temp/news/data/sj_data/all_data.txt")
+	return file_util.read_file("/Users/red/Desktop/temp/news/data/sj_data/all_data/article_txt.txt")
 
 
 if __name__ == '__main__':
