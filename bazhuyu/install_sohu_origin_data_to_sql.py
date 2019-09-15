@@ -4,7 +4,7 @@
 @Time    : 2019-05-12 14:36
 @Author  : red
 @Site    : 
-@File    : install_sohu_data.py
+@File    : install_sohu_origin_data_to_sql.py
 @Software: PyCharm
 　　读取CSV（逗号分割）文件到DataFrame，也支持文件的部分导入和选择迭代。
 　　filepath_or_buffer : str，pathlib。str, pathlib.Path, py._path.local.LocalPath or any object with a read() method (such as a file handle or StringIO)
