@@ -11,6 +11,7 @@ import time
 from utils import file_util as file
 from utils import cartesian
 from utils import dir_util
+from utils import xlwt_util
 import threading
 import os
 
@@ -100,6 +101,8 @@ class Thread(threading.Thread):
             # print(sorted_dict)
             # 将结果集中不为0的值写入文件
             write_file(os.path.join(self._path, str.split(element, '/')[-1]), sorted_dict)
+            xlwt_util.writeData(sorted_dict,
+                                os.path.join(self._path, str.split(element, '/')[-1].split('.')[0] + '.csv'))
         print("[{}]--write file end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
 
