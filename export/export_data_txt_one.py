@@ -6,6 +6,7 @@
 @Site    : 
 @File    : export_data_txt_one.py
 @Software: PyCharm
+
 """
 import time
 from utils import sql_util as sql
@@ -17,7 +18,7 @@ from itertools import groupby
 def get_sina_data(count):
     print("[{}]--start process sina sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     sina_article = sql.queryall(
-        "select * from sj_sina_article where CHAR_LENGTH(post_content_txt) > 20 limit " + str(count))
+        "select * from sj_sina_article where CHAR_LENGTH(post_content_txt) > 50 limit " + str(count))
 
     print("[{}]--process sina sql data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return sina_article
@@ -27,7 +28,7 @@ def get_tianya_data(count):
     print("[{}]--start process tianya sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     ty_article = sql.queryall(
-        "select * from sj_tianya_article where CHAR_LENGTH(question_detail) > 20 limit " + str(count))
+        "select * from sj_tianya_article where CHAR_LENGTH(question_detail) > 50 limit " + str(count))
     print("[{}]--process tianya sql data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return ty_article
 
@@ -35,9 +36,9 @@ def get_tianya_data(count):
 def get_sohu_data(count):
     print("[{}]--start process sohu sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
-    sohu_article = sql.queryall("select * from sj_sohu where CHAR_LENGTH(article_content) > 20 limit " + str(count))
+    sohu_article = sql.queryall("select * from sj_sohu where CHAR_LENGTH(article_content) > 50 limit " + str(count))
     bzy_sohu_article = sql.queryall(
-        "select * from bzy_sohu_article where CHAR_LENGTH(content) > 20 limit " + str(count))
+        "select * from bzy_sohu_article where CHAR_LENGTH(content) >50 limit " + str(count))
 
     print("[{}]--process sohu sql data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return sohu_article, bzy_sohu_article

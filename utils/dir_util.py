@@ -13,10 +13,13 @@ import os
 
 
 def remove_dir(file_path):
-    print("[{}]--start process remove dir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-    shutil.rmtree(file_path)
-    os.mkdir(file_path)
-    print("[{}]--end process remove dir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    if os.path.exists(file_path):
+        print("[{}]--start process remove dir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        shutil.rmtree(file_path)
+        os.mkdir(file_path)
+        print("[{}]--end process remove dir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    else:
+        os.mkdir(file_path)
 
 
 def mkdir(item):

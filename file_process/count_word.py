@@ -67,7 +67,7 @@ class RemoveNegatives:
 
         for word in word_list:
             if word[0] in self._file_data:
-                self._count_word_result[word[1]] = 0
+                self._count_word_result[word[1]] -= 1
         return self._count_word_result
 
 
@@ -94,7 +94,7 @@ class Thread(threading.Thread):
             words = WordCount(element, {})
             count_result = words.count_word()
 
-            # 将带否定词的词语置为0
+            # 将带否定词的词语置为0(改为-1)
             remove_repeat = RemoveNegatives(element, list(count_result.keys()), count_result)
             finally_result = remove_repeat.remove_repeat_count()
             sorted_dict = sorted(finally_result.items(), key=lambda item: item[1], reverse=True)

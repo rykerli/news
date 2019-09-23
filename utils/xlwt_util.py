@@ -17,9 +17,13 @@ array = [['','',''], ['','',''], ['','','']...]
 
 
 def writeData(data, name):
+    temp = []
+    for element in data:
+        if element[1] != 0:
+            temp.append(element)
     with open(name, 'a', errors='ignore', newline='') as f:
         f_csv = csv.writer(f)
-        f_csv.writerows(data)
+        f_csv.writerows(temp)
     # print('write_csv success')
 
 
