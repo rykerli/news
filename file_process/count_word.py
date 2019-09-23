@@ -113,7 +113,7 @@ def start(path, data, step=100):
     [thr.join() for thr in thr_list]
 
 
-if __name__ == '__main__':
+def start_main():
     origin_path_list = ["/Users/red/Desktop/temp/news/data/500data/sina",
                         "/Users/red/Desktop/temp/news/data/500data/sohu",
                         "/Users/red/Desktop/temp/news/data/500data/tianya"]

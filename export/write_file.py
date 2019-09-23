@@ -38,7 +38,7 @@ def start(path, data, step=100):
     [thr.join() for thr in thr_list]
 
 
-if __name__ == '__main__':
+def start_main():
     path = "/Users/red/Desktop/temp/news/data/500data"
     # 清空文件夹
     dir_util.remove_dir("/Users/red/Desktop/temp/news/data/500data")
