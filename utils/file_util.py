@@ -151,7 +151,17 @@ def get_file_list(dir_path, file_list):
         for s in os.listdir(dir_path):  # 如果是文件夹
             new_dir = os.path.join(dir_path, s)
             get_file_list(new_dir, file_list)
+    return file_list
 
+
+def get_file_list_end_with(dir_path, file_list, file_end_with=""):
+    # 如果是文件则添加进 fileList
+    if os.path.isfile(dir_path) & (os.path.splitext(dir_path)[-1][1:] == file_end_with):
+        file_list.append(dir_path)
+    elif os.path.isdir(dir_path):
+        for s in os.listdir(dir_path):  # 如果是文件夹
+            new_dir = os.path.join(dir_path, s)
+            get_file_list_end_with(new_dir, file_list, file_end_with)
     return file_list
 
 
