@@ -59,7 +59,7 @@ def sort_file_by_pos_and_neg(file_lists, path):
     print("[{}]--end sort {} discourse......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), path))
 
 
-if __name__ == '__main__':
+def start():
     # 清空文件夹
     dir_util.remove_dir(result_path)
     for element in result_path_list:

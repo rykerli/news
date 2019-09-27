@@ -9,7 +9,7 @@
 """
 import time
 from export import write_file, rename_file
-from file_process import count_word
+from file_process import count_word, txt_sort
 
 if __name__ == '__main__':
     # 导出文件并写入本地
@@ -18,3 +18,5 @@ if __name__ == '__main__':
     rename_file.start()
     # 统计词语
     count_word.start_main()
+    # 语篇排序
+    txt_sort.start()
