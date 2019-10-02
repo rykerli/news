@@ -208,6 +208,7 @@ def simple_value(row):
 
 
 if __name__ == '__main__':
+    print("只取一行:", queryone("select * from sj_sina"))  # 尽量使用limit
     pass
 
     # print("hello everyone!!!")

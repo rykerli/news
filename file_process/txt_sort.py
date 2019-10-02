@@ -48,11 +48,11 @@ def sort_file_by_pos_and_neg(file_lists, path):
             if item1[0] in pos:
                 pos_count += 1
         result.append((tempfilename, str(pos_count), str(neg_count)))
-    pos_sorted_list = sorted(result, key=lambda item2: (item2[1], item2[2]), reverse=True)
+    pos_sorted_list = sorted(result, key=lambda item2: (int(item2[1]), int(item2[2])), reverse=True)
     pos_sorted_list.insert(0, ("file name", 'positive number', 'negative number'))
     xlwt_util.writeData(pos_sorted_list,
                         os.path.join(result_path, path + '_pos_sort.csv'))
-    neg_sorted_list = sorted(result, key=lambda item3: (item3[2], item3[1]), reverse=True)
+    neg_sorted_list = sorted(result, key=lambda item3: (int(item3[2]), int(item3[1])), reverse=True)
     neg_sorted_list.insert(0, ("file name", 'positive number', 'negative number'))
     xlwt_util.writeData(neg_sorted_list,
                         os.path.join(result_path, path + '_neg_sort.csv'))
