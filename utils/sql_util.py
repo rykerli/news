@@ -25,7 +25,7 @@ import traceback
 
 import pymysql.cursors
 
-from utils import logger_util
+import logger_util
 
 logger = logger_util.logger
 
