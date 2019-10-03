@@ -7,12 +7,14 @@
 @File    : rename_file.py
 @Software: PyCharm
 """
+import sys
+sys.path.append('../utils')
 import time
 import os
-from utils import file_util as file
+import file_util as file
 
 path_len = 8
-path = "/Users/red/Desktop/temp/news/data/500data"
+path = "/root/data/news/500data"
 path_list = [os.path.join(path, 'sina'), os.path.join(path, 'sohu'), os.path.join(path, 'tianya')]
 
 

@@ -7,13 +7,15 @@
 @File    : txt_sort.py
 @Software: PyCharm
 """
+import sys
+sys.path.append('../utils')
 import time
-from utils import xlwt_util
-from utils import dir_util
+import xlwt_util
+import dir_util
 
 import os
 
-from utils import file_util as file
+import file_util as file
 
 neg_vo = file.read_file("../resource/vocabulary/negative.txt")
 neg = []
@@ -23,12 +25,12 @@ pos_vo = file.read_file("../resource/vocabulary/positive.txt")
 pos = []
 [pos.append(element.replace('\n', '')) for element in
  pos_vo]
-sohu_result_path = "/Users/red/Desktop/temp/news/data/500data/sohu_result"
-sina_result_path = "/Users/red/Desktop/temp/news/data/500data/sina_result"
-tianya_result_path = "/Users/red/Desktop/temp/news/data/500data/tianya_result"
+sohu_result_path = "/root/data/news/500data/sohu_result"
+sina_result_path = "/root/data/news/500data/sina_result"
+tianya_result_path = "/root/data/news/500data/tianya_result"
 
 result_path_list = [sina_result_path, sohu_result_path, tianya_result_path]
-result_path = "/Users/red/Desktop/temp/news/data/500data/discourse_sort"
+result_path = "/root/data/news/500data/discourse_sort"
 
 
 def sort_file_by_pos_and_neg(file_lists, path):

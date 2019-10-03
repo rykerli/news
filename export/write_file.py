@@ -7,11 +7,14 @@
 @File    : write_file.py
 @Software: PyCharm
 """
+import sys
+sys.path.append('../utils')
 import time
 import threading
 import os
-from utils import file_util, dir_util
-from export import export_data_txt_one
+import file_util, dir_util
+# from export import export_data_txt_one
+import export_data_txt_one
 
 
 class Thread(threading.Thread):
@@ -39,9 +42,9 @@ def start(path, data, step=100):
 
 
 def start_main():
-    path = "/Users/red/Desktop/temp/news/data/500data"
+    path = "/root/data/news/500data"
     # 清空文件夹
-    dir_util.remove_dir("/Users/red/Desktop/temp/news/data/500data")
+    dir_util.remove_dir("/root/data/news/500data")
     # 创建文件夹
     dir_util.mkdir([os.path.join(path, 'sina'), os.path.join(path, 'sohu'), os.path.join(path, 'tianya')])
     # 获取数据

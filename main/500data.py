@@ -7,9 +7,13 @@
 @File    : 500data.py
 @Software: PyCharm
 """
+import sys
+sys.path.append('../export')
+sys.path.append('../file_process')
 import time
-from export import write_file, rename_file
-from file_process import count_word, txt_sort
+# from export import export_data_txt_one
+import write_file, rename_file
+import count_word, txt_sort
 
 if __name__ == '__main__':
     # 导出文件并写入本地

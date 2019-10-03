@@ -8,9 +8,11 @@
 @Software: PyCharm
 
 """
+import sys
+sys.path.append('../utils')
 import time
-from utils import sql_util as sql
-from utils import file_util
+import sql_util as sql
+import file_util
 from operator import itemgetter
 from itertools import groupby
 
@@ -36,7 +38,7 @@ def get_tianya_data(count):
 def get_sohu_data(count):
     print("[{}]--start process sohu sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
-    sohu_article = sql.queryall("select * from sj_sohu where CHAR_LENGTH(article_content) > 50 limit " + str(count))
+    sohu_article = sql.queryall("select * from sj_sohu_no_html where CHAR_LENGTH(article_content) > 50 limit " + str(count))
     bzy_sohu_article = sql.queryall(
         "select * from bzy_sohu_article where CHAR_LENGTH(content) >50 limit " + str(count))
 
@@ -87,17 +89,3 @@ def process_sohu_data(count):
 
 def main():
     return process_sina_data(500), process_sohu_data(250), process_tianya_data(500)
-
-
-if __name__ == '__main__':
-    file_path = '/Users/red/Desktop/temp/news/data/all_data.txt'
-
-    # sina = process_sina_data()
-    # print(sina)
-    # bzy和sj各250篇
-    sohu = process_sohu_data(250)
-    print(sohu)
-    # tianya = process_tianya_data(500)
-    # print(tianya)
-
-    # file_util.append_file(file_path, str(sina))

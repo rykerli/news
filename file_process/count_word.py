@@ -7,11 +7,13 @@
 @File    : count_word.py
 @Software: PyCharm
 """
+import sys
+sys.path.append('../utils')
 import time
-from utils import file_util as file
-from utils import cartesian
-from utils import dir_util
-from utils import xlwt_util
+import file_util as file
+import cartesian
+import dir_util
+import xlwt_util
 import threading
 import os
 
@@ -20,9 +22,9 @@ pos = file.read_file("../resource/vocabulary/positive.txt")
 neg_vo = []
 [neg_vo.append(element.replace('\n', '')) for element in
  file.read_file("../resource/vocabulary/negative_vocabulary.txt")]
-sohu_result_path = "/Users/red/Desktop/temp/news/data/500data/sohu_result"
-sina_result_path = "/Users/red/Desktop/temp/news/data/500data/sina_result"
-tianya_result_path = "/Users/red/Desktop/temp/news/data/500data/tianya_result"
+sohu_result_path = "/root/data/news/500data/sohu_result"
+sina_result_path = "/root/data/news/500data/sina_result"
+tianya_result_path = "/root/data/news/500data/tianya_result"
 
 
 class WordCount:
@@ -114,9 +116,9 @@ def start(path, data, step=100):
 
 
 def start_main():
-    origin_path_list = ["/Users/red/Desktop/temp/news/data/500data/sina",
-                        "/Users/red/Desktop/temp/news/data/500data/sohu",
-                        "/Users/red/Desktop/temp/news/data/500data/tianya"]
+    origin_path_list = ["/root/data/news/500data/sina",
+                        "/root/data/news/500data/sohu",
+                        "/root/data/news/500data/tianya"]
     result_path_list = [sina_result_path, sohu_result_path, tianya_result_path]
     i = 0
     for element in origin_path_list:
