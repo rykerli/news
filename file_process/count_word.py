@@ -88,7 +88,7 @@ class Thread(threading.Thread):
         super().__init__()
 
     def run(self):
-        print("[{}]--write file start, process {} thread, num is {}......".format(
+        print("[{}]--write count word file start, process {} thread, num is {}......".format(
             time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), self._num, len(self._lst)))
 
         for element in self._lst:
@@ -105,10 +105,10 @@ class Thread(threading.Thread):
             write_file(os.path.join(self._path, str.split(element, '/')[-1]), sorted_dict)
             xlwt_util.writeData(sorted_dict,
                                 os.path.join(self._path, str.split(element, '/')[-1].split('.')[0] + '.csv'))
-        print("[{}]--write file end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        print("[{}]--write count word file end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
 
-def start(path, data, step=100):
+def start(path, data, step=5000):
     temp_list = [data[i:i + step] for i in range(0, len(data), step)]
     thr_list = [Thread(i, temp_list[i], path) for i in range(len(temp_list))]
     [thr.start() for thr in thr_list]
@@ -122,9 +122,11 @@ def start_main():
     result_path_list = [sina_result_path, sohu_result_path, tianya_result_path]
     i = 0
     for element in origin_path_list:
+        print("[{}]--write {} file start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), element))
         # 清空文件夹
         dir_util.remove_dir(result_path_list[i])
         # 获取sina所有文件
         file_list = file.get_file_list(element, [])
         start(result_path_list[i], file_list)
         i += 1
+        print("[{}]--write {} file end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), element))

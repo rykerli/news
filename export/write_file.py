@@ -34,21 +34,21 @@ class Thread(threading.Thread):
         print("[{}]--write file end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
 
-def start(path, data, step=100):
+def start(path, data, step=1000):
     temp_list = [data[i:i + step] for i in range(0, len(data), step)]
     thr_list = [Thread(i, temp_list[i], path) for i in range(len(temp_list))]
     [thr.start() for thr in thr_list]
     [thr.join() for thr in thr_list]
 
 
-def start_main():
+def start_main(limit):
     path = "/root/data/news/500data"
     # 清空文件夹
     dir_util.remove_dir("/root/data/news/500data")
     # 创建文件夹
     dir_util.mkdir([os.path.join(path, 'sina'), os.path.join(path, 'sohu'), os.path.join(path, 'tianya')])
     # 获取数据
-    sina, sohu, tianya = export_data_txt_one.main()
-    start(str(os.path.join(path, 'sina')), sina, 100)
-    start(str(os.path.join(path, 'sohu')), sohu, 100)
-    start(str(os.path.join(path, 'tianya')), tianya, 100)
+    sina, sohu, tianya = export_data_txt_one.main(limit)
+    start(str(os.path.join(path, 'sina')), sina, 5000)
+    start(str(os.path.join(path, 'sohu')), sohu, 5000)
+    start(str(os.path.join(path, 'tianya')), tianya, 5000)

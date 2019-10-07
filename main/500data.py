@@ -16,8 +16,8 @@ import write_file, rename_file
 import count_word, txt_sort
 
 if __name__ == '__main__':
-    # 导出文件并写入本地
-    write_file.start_main()
+    # 导出文件并写入本地 limit=0处理所有数据
+    write_file.start_main(0)
     # 重命名文件
     rename_file.start()
     # 统计词语

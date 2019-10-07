@@ -8,6 +8,7 @@
 @Software: PyCharm
 """
 import sys
+print(sys.path)
 sys.path.append('../utils')
 import time
 import os
