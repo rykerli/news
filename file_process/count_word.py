@@ -22,9 +22,12 @@ pos = file.read_file("../resource/vocabulary/positive.txt")
 neg_vo = []
 [neg_vo.append(element.replace('\n', '')) for element in
  file.read_file("../resource/vocabulary/negative_vocabulary.txt")]
-sohu_result_path = "/root/data/news/500data/sohu_result"
-sina_result_path = "/root/data/news/500data/sina_result"
-tianya_result_path = "/root/data/news/500data/tianya_result"
+# sohu_result_path = "/root/data/news/500data/sohu_result"
+# sina_result_path = "/root/data/news/500data/sina_result"
+# tianya_result_path = "/root/data/news/500data/tianya_result"
+sohu_result_path = "/home/data/news/80data/sohu_result"
+sina_result_path = "/home/data/news/80data/sina_result"
+tianya_result_path = "/home/data/news/80data/tianya_result"
 
 
 class WordCount:
@@ -116,9 +119,9 @@ def start(path, data, step=5000):
 
 
 def start_main():
-    origin_path_list = ["/root/data/news/500data/sina",
-                        "/root/data/news/500data/sohu",
-                        "/root/data/news/500data/tianya"]
+    origin_path_list = ["/home/data/news/80data/sina",
+                        "/home/data/news/80data/sohu",
+                        "/home/data/news/80data/tianya"]
     result_path_list = [sina_result_path, sohu_result_path, tianya_result_path]
     i = 0
     for element in origin_path_list:

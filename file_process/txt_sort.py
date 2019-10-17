@@ -25,12 +25,15 @@ pos_vo = file.read_file("../resource/vocabulary/positive.txt")
 pos = []
 [pos.append(element.replace('\n', '')) for element in
  pos_vo]
-sohu_result_path = "/root/data/news/500data/sohu_result"
-sina_result_path = "/root/data/news/500data/sina_result"
-tianya_result_path = "/root/data/news/500data/tianya_result"
+# sohu_result_path = "/root/data/news/500data/sohu_result"
+# sina_result_path = "/root/data/news/500data/sina_result"
+# tianya_result_path = "/root/data/news/500data/tianya_result"
+sohu_result_path = "/home/data/news/80data/sohu_result"
+sina_result_path = "/home/data/news/80data/sina_result"
+tianya_result_path = "/home/data/news/80data/tianya_result"
 
 result_path_list = [sina_result_path, sohu_result_path, tianya_result_path]
-result_path = "/root/data/news/500data/discourse_sort"
+result_path = "/home/data/news/80data/discourse_sort"
 
 
 def sort_file_by_pos_and_neg(file_lists, path):
@@ -51,7 +54,7 @@ def sort_file_by_pos_and_neg(file_lists, path):
             if item1[0] in pos:
                 pos_count += 1
 #             txt_sum += len(item1)
-        result.append(tempfilename, str(pos_count), str(neg_count))
+        result.append((tempfilename, str(pos_count), str(neg_count)))
     pos_sorted_list = sorted(result, key=lambda item2: (int(item2[1]), int(item2[2])), reverse=True)
     pos_sorted_list.insert(0, ("file name", 'positive number', 'negative number'))
     xlwt_util.writeData(pos_sorted_list,

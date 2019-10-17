@@ -14,16 +14,16 @@ import os
 
 def remove_dir(file_path):
     if os.path.exists(file_path):
-        print("[{}]--start process remove dir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        print("[{}]--start process remove dir: {}......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), file_path))
         shutil.rmtree(file_path)
         os.mkdir(file_path)
-        print("[{}]--end process remove dir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        print("[{}]--end process remove dir: {}......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), file_path))
     else:
         os.mkdir(file_path)
 
 
 def mkdir(item):
-    print("[{}]--start process mkdir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    print("[{}]--start process mkdir: {}......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), item))
     if isinstance(item, str):
         os.mkdir(item)
     elif isinstance(item, list):
@@ -31,4 +31,4 @@ def mkdir(item):
             os.mkdir(element)
     else:
         raise SystemExit('Parameter error!')
-    print("[{}]--end process mkdir......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+    print("[{}]--end process mkdir: {}......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), item))

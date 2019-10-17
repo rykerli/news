@@ -42,9 +42,11 @@ def start(path, data, step=1000):
 
 
 def start_main(limit):
-    path = "/root/data/news/500data"
+    path = "/home/data/news/80data"
+#     path = "/root/data/news/500data"
     # 清空文件夹
-    dir_util.remove_dir("/root/data/news/500data")
+#     dir_util.remove_dir("/root/data/news/500data")
+    dir_util.remove_dir("/home/data/news/80data")
     # 创建文件夹
     dir_util.mkdir([os.path.join(path, 'sina'), os.path.join(path, 'sohu'), os.path.join(path, 'tianya')])
     # 获取数据

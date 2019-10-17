@@ -20,11 +20,13 @@ from itertools import groupby
 def get_sina_data(limit):
     print("[{}]--start process sina sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     if limit != 0:
+#         sina_article = sql.queryall(
+#             "select * from sj_sina_article where CHAR_LENGTH(post_content_txt) > 50 limit " + str(limit))
         sina_article = sql.queryall(
-            "select * from sj_sina_article where CHAR_LENGTH(post_content_txt) > 50 limit " + str(limit))
+            "select * from sj_sina_article where CHAR_LENGTH(TRIM(post_content_txt)) > 80 and CHAR_LENGTH(TRIM(post_content_txt)) < 1500 limit " + str(limit))
     else:
         sina_article = sql.queryall(
-            "select * from sj_sina_article")
+            "select * from sj_sina_article where CHAR_LENGTH(TRIM(post_content_txt)) > 80 and CHAR_LENGTH(TRIM(post_content_txt)) < 1500")
     print("[{}]--process sina sql data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return sina_article
 
@@ -33,10 +35,10 @@ def get_tianya_data(limit):
     print("[{}]--start process tianya sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     if limit != 0:
         ty_article = sql.queryall(
-            "select * from sj_tianya_article where CHAR_LENGTH(question_detail) > 50 limit " + str(limit))
+            "select * from sj_tianya_article where CHAR_LENGTH(TRIM(question_detail)) > 80 and CHAR_LENGTH(TRIM(question_detail)) < 1500 limit " + str(limit))
     else:
         ty_article = sql.queryall(
-            "select * from sj_tianya_article")
+            "select * from sj_tianya_article where CHAR_LENGTH(TRIM(question_detail)) > 80 and CHAR_LENGTH(TRIM(question_detail)) < 1500")
     print("[{}]--process tianya sql data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return ty_article
 
@@ -44,13 +46,13 @@ def get_tianya_data(limit):
 def get_sohu_data(limit):
     print("[{}]--start process sohu sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     if limit != 0:
-        sohu_article = sql.queryall("select * from sj_sohu_no_html where CHAR_LENGTH(article_content) > 50 limit " + str(limit))
+        sohu_article = sql.queryall("select * from sj_sohu_no_html where CHAR_LENGTH(TRIM(article_content)) > 80  and CHAR_LENGTH(TRIM(article_content)) < 1500 limit " + str(limit))
         bzy_sohu_article = sql.queryall(
-            "select * from bzy_sohu_article where CHAR_LENGTH(content) >50 limit " + str(limit))
+            "select * from bzy_sohu_article where CHAR_LENGTH(TRIM(content)) > 80 and CHAR_LENGTH(TRIM(content)) < 1500 limit " + str(limit))
     else:
-        sohu_article = sql.queryall("select * from sj_sohu_no_html")
+        sohu_article = sql.queryall("select * from sj_sohu_no_html where CHAR_LENGTH(TRIM(article_content)) > 80  and CHAR_LENGTH(TRIM(article_content)) < 1500")
         bzy_sohu_article = sql.queryall(
-            "select * from bzy_sohu_article")
+            "select * from bzy_sohu_article where CHAR_LENGTH(TRIM(content)) > 80 and CHAR_LENGTH(TRIM(content)) < 1500")
     print("[{}]--process sohu sql data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return sohu_article, bzy_sohu_article
 
