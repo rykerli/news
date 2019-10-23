@@ -208,9 +208,13 @@ def simple_value(row):
 
 
 if __name__ == '__main__':
-    print("只取一行:", queryone("select * from sj_sina"))  # 尽量使用limit
-    pass
+#     pass
 
+#     result = []
+#     for element in array:
+#         result.append(tuple(element.values()))
+#     print(result)
+#     print("插入数据:", insertmany(sql_str, result))
     # print("hello everyone!!!")
     #
     # # print("删表:", execute('drop table test'))
@@ -247,7 +251,7 @@ if __name__ == '__main__':
     # print("多列:", queryall("select * from test_users where email = %s and password = %s", ("bbb@126.com", "222222")))
     #
     # # 更新|删除
-    # print("更新:", execute("update test_users set email = %s where id = %s", ('new@126.com', 1)))
+    print("更新:", execute("update test_users set email = %s where id = %s", ('new@126.com', 1)))
     # print("删除:", execute("delete from test_users where id = %s", 4))
     #
     # # 查询

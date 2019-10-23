@@ -9,16 +9,16 @@
 """
 import time
 import sys
-
 sys.path.append('../utils')
-import time
 import sql_util as sql
-import file_util
-from operator import itemgetter
-from itertools import groupby
+# import file_util
+# from operator import itemgetter
+# from itertools import groupby
 import re
-import time
+import time_util
 import threading
+
+path_len = 8
 
 
 def get_sina_data(limit, min_num, max_num):
@@ -57,7 +57,7 @@ def get_sohu_data(limit, min_num, max_num):
             "select * from sj_sohu where CHAR_LENGTH(TRIM(article_content)) > " + str(min_num)
             + "  and CHAR_LENGTH(TRIM(article_content)) < " + str(max_num) + " limit " + str(limit))
         bzy_sohu_article = sql.queryall(
-            "select * from bzy_sohu_origin_data where CHAR_LENGTH(TRIM(content)) > " + str(min_num)
+            "select * from bzy_sohu_article where CHAR_LENGTH(TRIM(content)) > " + str(min_num)
             + " and CHAR_LENGTH(TRIM(content)) < " + str(max_num) + " limit " + str(limit))
     else:
         sohu_article = sql.queryall(
@@ -73,11 +73,11 @@ def get_sohu_data(limit, min_num, max_num):
 def process_sina_data(limit, min_num, max_num):
     print("[{}]--start process data......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     sina_article = get_sina_data(limit, min_num, max_num)
-    # sina_result = []
-    #
-    # for element in sina_article:
-    #     temp = [str(element.get('id')), str(element.get('post_content_txt'))]
-    #     sina_result.append(temp)
+    count = 0
+    for item in sina_article:
+        item['word_count'] = len(item.get('post_content_txt'))
+        item['number'] = '0' * (path_len - len(str(count))) + str(count)
+        count += 1
     print("[{}]--process data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return sina_article
 
@@ -85,11 +85,11 @@ def process_sina_data(limit, min_num, max_num):
 def process_tianya_data(limit, min_num, max_num):
     print("[{}]--start process tianya data......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     ty_article = get_tianya_data(limit, min_num, max_num)
-    # ty_result = []
-    # for element in ty_article:
-    #     temp = [str(element.get('id')), str(element.get('question_detail'))]
-    #     ty_result.append(temp)
-
+    count = 0
+    for item in ty_article:
+        item['word_count'] = len(item.get('question_detail'))
+        item['number'] = '0' * (path_len - len(str(count))) + str(count)
+        count += 1
     print("[{}]--process tianya data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return ty_article
 
@@ -99,11 +99,34 @@ def process_sohu_data(limit, min_num, max_num):
     sohu_article, bzy_sohu_article = get_sohu_data(limit, min_num, max_num)
     start(sohu_article)
     sohu_result = []
+#     print(sj_sohu_result[-1])
     sohu_result += sj_sohu_result
+#     print(sohu_result)
     # 开始处理sohu bzy数据并合并到数组
+#     bzy_result = []
     for element in bzy_sohu_article:
-        print(element)
-        break
+        temp = {}
+        temp['id'] = element.get('id')
+        temp['time'] = time_util.date_to_stamp(element.get('time'))
+        temp['article_link'] = ''
+        temp['article_title'] = element.get('title')
+        temp['article_content'] = element.get('content')
+        temp['article_author'] = ''
+        temp['article_avatar'] = ''
+        temp['views_count'] = 0
+        temp['article_publish_time'] = 0
+        temp['article_topics'] = ''
+        temp['article_thumbnails'] = ''
+        temp['article_category'] = ''
+        temp['article_content_txt'] = element.get('content')
+        
+        sohu_result.append(temp)
+    count = 0
+    for item in sohu_result:
+        item['word_count'] = len(item.get('article_content_txt'))
+        item['number'] = '0' * (path_len - len(str(count))) + str(count)
+        count += 1
+#     print(sohu_result[-1])
     print("[{}]--process sohu data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     return sohu_result
 
@@ -144,24 +167,58 @@ def start(sohu_article, step=5000):
 
 
 def main(limit, min_num, max_num):
-    return process_sina_data(limit, min_num, max_num), process_sohu_data(limit, min_num, max_num), process_tianya_data(
+    # 清空数据库
+    sql.execute("truncate table sina")
+    sql.execute("truncate table sohu")
+    sql.execute("truncate table tianya")
+    
+    sina_data, sohu_data, tianya_data = process_sina_data(limit, min_num, max_num), process_sohu_data(limit, min_num, max_num), process_tianya_data(
         limit, min_num, max_num)
+    sohu_str = "insert into sohu(id, time, article_link, article_title, article_content, article_author, article_avatar, views_count, article_publish_time, article_topics, article_thumbnails, article_category, article_content_txt, word_count, number) values (%s, %s, %s, %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s)"
+    sina_str = "insert sina(id, time, url, userid, nickname, avatar, follow_count, followers_count, post_time, post_content, post_content_txt, source, reposts_count, comments_count, attitudes_count, isLongText, pics, video, video_pic, is_repost, origin, reposts, comments, topic, word_count, number) values(%s, %s, %s, %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,  %s, %s, %s)"
+    tianya_str = "insert into tianya(id, question_link, question_title, get_time, question_detail, question_author, question_author_avatar, question_publish_time, question_topics, question_answer, word_count, number) values(%s, %s, %s, %s, %s, %s, %s, %s,  %s, %s, %s, %s)"
+    
+    sohu_result = []
+    for element in sohu_data:
+        sohu_result.append(tuple(element.values()))
+    
+    sina_result = []
+    for element in sina_data:
+        sina_result.append(tuple(element.values()))
+    
+    tianya_result = []
+    for element in tianya_data:
+        tianya_result.append(tuple(element.values()))
+    
+    sohu_count = sql.insertmany(sohu_str, sohu_result)
+    query_sohu = sql.queryone("select count(*) from sj_sohu where CHAR_LENGTH(TRIM(article_content)) > " + str(min_num)
+            + "  and CHAR_LENGTH(TRIM(article_content)) < " + str(max_num) + "") + sql.queryone("select count(*) from bzy_sohu_article where CHAR_LENGTH(TRIM(content)) > " + str(min_num)
+            + " and CHAR_LENGTH(TRIM(content)) < " + str(max_num) + "")
 
+    
+    if sohu_count == query_sohu:
+        print("write sohu data success...")
+    else:
+        print("write sohu data faild...")
+        sys.exit(0)
+        
+    sina_count = sql.insertmany(sina_str, sina_result)
+    query_sina = sql.queryone("select count(*) from sj_sina where CHAR_LENGTH(TRIM(post_content_txt)) > " + str(min_num)
+            + " and CHAR_LENGTH(TRIM(post_content_txt)) < " + str(max_num) + "")
+    if sina_count == query_sina:
+        print("write sina data success...")
+    else:
+        print("write sina data faild...")
+        sys.exit(0)
+    
+    tianya_count = sql.insertmany(tianya_str, tianya_result)
+    query_tianya = sql.queryone("select count(*) from sj_tianya where CHAR_LENGTH(TRIM(question_detail)) > " + str(min_num)
+            + " and CHAR_LENGTH(TRIM(question_detail)) < " + str(max_num) + "")
+    if tianya_count == query_tianya:
+        print("write tianya data success...")
+    else:
+        print("write tianya data faild...")
+        sys.exit(0)
 
 if __name__ == '__main__':
-    #     {'id': '1', 'time': 1548389177, 'article_link': 'http://m.sohu.com/a/291336783_114911?_f=m-channel_8_feeds_3',
-    #     'article_title': '内地游客玩无人机撞大三巴牌坊 澳门：已将涉事人员带走调查', 'article_content': '参考消息网1月24日报道海外媒体称，
-    #     1月23日晚一名男游客玩航拍期间，疑似无人机突然故障无信号，撞击澳门大三巴牌坊后“坠落”二层窗口，当地保安报警处理。 据《澳门日报》1月24日报道，
-    #     23日晚8点半许，澳门警方接到报案信息，称大三巴牌坊发生航拍无人机毁损事件',
-    #     'article_author': '参考消息', 'article_avatar': 'http://img.mp.sohu.com/upload/20180122/b91280cae1434c90aa7286
-    #     b3ac77142f', 'views_count': 78971, 'article_publish_time': 1548375849, 'article_topics': '[]',
-    #     'article_thumbnails': '[]', 'article_category': '新闻'}
-
-    # {'title': '以色列总理视察军力部署：已准备好对加沙采取大规模行动', 'time': '2019-03-29 19:16',
-    # 'content': '原标题：以色列总理视察军力部署：已准备好对加沙采取大规模行动            新京报快讯（记者 刘壹昭）据美联社报道，3月28日，以色列总理办公室发布消息，
-    # 称以色列总理内塔尼亚胡当天视察了以色列国防军在加沙地带边境的兵力部署情况，并表示已经做好对加沙地带进行大规模行动的准备。 内塔尼亚胡在视察后表示，以色列正在加强加沙地带周边的安全部署，
-    # 近日他已下令增调兵力和器械，做好对加沙地带进行大规模行动的准备。  3月27日，以色列军人坐在近以色列与加沙边界的军车上。图源：美联社
-    # 内塔尼亚胡的声明发表在哈马斯政权与以色列进行新一轮交火后，而埃及作为中间调停者，则寄望于双方拓展停火协议。 以色列国防军28日发表声明说，
-    # 以军已在以色列南部加强军力部署，以应对即将到来的巴勒斯坦“土地日”可能出现的“暴力活动”升级情况。 新京报记者 刘壹昭 编辑 白爽 校对 危卓返回搜狐，
-    # 查看更多      责任编辑：', 'user': '', 'comment': ''}
-    process_sohu_data(10, 80, 1800)
+    main(0, 80, 1800)
