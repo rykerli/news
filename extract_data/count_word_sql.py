@@ -199,62 +199,6 @@ def start1(path, data, step=5000):
     [thr.join() for thr in thr_list]
 
 
-#
-# def update_positive_negative_word_num(sina_pn_data, sohu_pn_data, tianya_pn_data):
-#     print("[{}]--start update sina positive_negative_number......".format(
-#         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-#     for element in sina_pn_data:
-#         temp = eval(element.get('pn_word_count'))
-#         # 统计消极、积极词语数量、文章字数
-#         neg_count = 0
-#         pos_count = 0
-#         for item in temp:
-#             if item[0] in neg:
-#                 neg_count += item[1]
-#             if item[0] in pos:
-#                 pos_count += item[1]
-#         sql.execute("update sina set positive_number = %s, negative_number = %s where id = %s",
-#                     (pos_count, neg_count, element.get('id')))
-#     print("[{}]--start update sina positive_negative_number......".format(
-#         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-#
-#     print("[{}]--start update sohu positive_negative_number......".format(
-#         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-#     for element in sohu_pn_data:
-#         temp = eval(element.get('pn_word_count'))
-#
-#         # 统计消极、积极词语数量、文章字数
-#         neg_count = 0
-#         pos_count = 0
-#         for item in temp:
-#             if item[0] in neg:
-#                 neg_count += item[1]
-#             if item[0] in pos:
-#                 pos_count += item[1]
-#         sql.execute("update sohu set positive_number = %s, negative_number = %s where id = %s",
-#                     (pos_count, neg_count, element.get('id')))
-#     print("[{}]--start update sohu positive_negative_number......".format(
-#         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-#
-#     print("[{}]--start update tianya positive_negative_number......".format(
-#         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-#     for element in tianya_pn_data:
-#         temp = eval(element.get('pn_word_count'))
-#
-#         # 统计消极、积极词语数量、文章字数
-#         neg_count = 0
-#         pos_count = 0
-#         for item in temp:
-#             if item[0] in neg:
-#                 neg_count += item[1]
-#             if item[0] in pos:
-#                 pos_count += item[1]
-#         sql.execute("update tianya set positive_number = %s, negative_number = %s where id = %s",
-#                     (pos_count, neg_count, element.get('id')))
-#     print("[{}]--start update tianya positive_negative_number......".format(
-#         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-
-
 def get_data():
     print("[{}]--start get sina sql......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
@@ -291,18 +235,22 @@ def get_pn_data():
 
 def start_main():
     sina_data, sohu_data, tianya_data = get_data()
-    #     origin_data = [sina_data, sohu_data, tianya_data]
-    #     result_list = ["sina", "sohu", "tianya"]
-
-    #     i = 0
-    #     for element in origin_data:
-    #         print("[{}]--update count {} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), result_list[i]))
-    #         start(result_list[i], origin_data[i])
-    #         print("[{}]--update count {} data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), result_list[i]))
-    #         i += 1
+    
+    origin_data = [sina_data, sohu_data, tianya_data]
+    result_list = ["sina", "sohu", "tianya"]
+    
+    i = 0
+    for element in origin_data:
+        print("[{}]--update count {} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), result_list[i]))
+        start(result_list[i], origin_data[i])
+        print("[{}]--update count {} data end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), result_list[i]))
+        i += 1
+        
     sina_pn_data, sohu_pn_data, tianya_pn_data = get_pn_data()
+    
     origin_pn_data = [sina_pn_data, sohu_pn_data, tianya_pn_data]
     result_pn_list = ["sina", "sohu", "tianya"]
+    
     i = 0
     for element in origin_pn_data:
         print("[{}]--update count {} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
