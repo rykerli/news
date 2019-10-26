@@ -8,12 +8,14 @@
 @Software: PyCharm
 """
 import sys
-# sys.path.append('../export')
-# sys.path.append('../file_process')
+sys.path.append('../export')
+sys.path.append('../file_process')
 import time
-# from export import export_data_txt_one
-# import write_file, rename_file
-# import count_word, txt_sort
+
+from export import export_data_txt_one
+import write_file, rename_file
+import count_word, txt_sort
+import export_pn_data
 
 if __name__ == '__main__':
     """
@@ -27,4 +29,7 @@ if __name__ == '__main__':
     统计语篇的积极词汇和消极词汇，并计算词频
     """
     count_word_sql.start_main()
-    
+    """
+    根据需求导出数据
+    """
+    export_pn_data.start_main()
