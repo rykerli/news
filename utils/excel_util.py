@@ -10,7 +10,7 @@
 
 from pyexcel_xls import get_data
 import os
-from utils import sql_util
+import sql_util
 import csv
 import uuid
 
@@ -24,6 +24,10 @@ def read_csv_file(path):
             row.insert(0, str(uuid.uuid4()))
             arrays.append(row)
     return arrays
+
+
+def read_excel_data(path):
+    return get_data(path)
 
 
 def read_xls_file(path):

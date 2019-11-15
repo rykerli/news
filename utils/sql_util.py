@@ -251,7 +251,7 @@ if __name__ == '__main__':
     # print("多列:", queryall("select * from test_users where email = %s and password = %s", ("bbb@126.com", "222222")))
     #
     # # 更新|删除
-    print("更新:", execute("update test_users set email = %s where id = %s", ('new@126.com', 1)))
+    print("更新:", execute("update sina set pos_status = %s where number = %s", (int(0), '0' * (8 - len(str("29073"))) + str("29073"))))
     # print("删除:", execute("delete from test_users where id = %s", 4))
     #
     # # 查询
