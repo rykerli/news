@@ -16,22 +16,25 @@ import excel_util as excel
 
 
 def read_data(path, table, table_type):
+    # 根据传入的number查到本条记录并取得pn_word_count，再根据pn_word_count和pos_status=0查询是否已经存在相同的文章
     print("[{}]--update {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                table, table_type))
     faild = []
     arrays = excel.read_excel_data(path)
-    count = 0
+
+    result = []
     for sheet_n in arrays.keys():
         if arrays[sheet_n]:
+            count = 0
             for item in arrays[sheet_n][1:]:
-                count+=1
-                # 更新数据
-                temp = sql.execute("update " + table + " set " + table_type + "_status = %s where number = %s", (int(0), '0' * (8 - len(str(item[0]))) + str(item[0])))
-                if temp == 0:
-                    faild.append('0' * (8 - len(str(item[0]))) + str(item[0]))
-    print("[{}]--update count {} data  end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-                                                               count))
-    print("faild list: {}", faild)
+                pn_word_count = sql.queryone('select pn_word_count from ' + table + ' where number = %s', str('0' * (8 - len(str(item[0]))) + str(item[0])))
+                tmp_result = sql.queryall('select * from ' + table + ' where pn_word_count = ' + pn_word_count + ' and ' + table_type + '_status = 0')
+                if not tmp_result:
+                    count += 1
+                    result.append((int(0), int(count), str('0' * (8 - len(str(item[0]))) + str(item[0]))))
+
+    sql.execute_sql_list('update ' + table + ' set ' + table_type + '_status = %s, order_' + table_type + ' = %s where number = %s ', result)
+
 
 if __name__ == '__main__':
     read_data("/home/data/news/dataupdate/sina-pos.xlsx", "sina", "pos")

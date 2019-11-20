@@ -170,6 +170,32 @@ def execute(sql, param=None):
     return cnt
 
 
+def execute_sql_list(sql, param=None):
+    """
+    执行sql语句:修改或删除
+    :param sql: sql语句
+    :param param: string|list
+    :return: 影响数量
+    """
+    con = connect_mysql()
+    cur = con.cursor()
+
+    cnt = 0
+    try:
+        for element in param:
+            cnt = cur.execute(str(sql), element)
+    except Exception as e:
+        con.rollback()
+        logger.error('事务处理失败, {}'.format(e))
+#         logger.error("[sql]:{} [param]:{}".format(sql, param))
+    else:
+        con.commit()
+        print('事务处理成功', cur)
+    cur.close()
+    con.close()
+    return cnt
+
+
 def simple_list(rows):
     """
     结果集只有一列的情况, 直接使用数据返回
@@ -251,7 +277,12 @@ if __name__ == '__main__':
     # print("多列:", queryall("select * from test_users where email = %s and password = %s", ("bbb@126.com", "222222")))
     #
     # # 更新|删除
-    print("更新:", execute("update sina set pos_status = %s where number = %s", (int(0), '0' * (8 - len(str("29073"))) + str("29073"))))
+    result = queryall('select * from sina where number = %s', '0000004')
+    if not result:
+        print('none')
+    print(type(result))
+#     print("更新:", execute("update sina set pos_status = %s, order_pos = %s where number = %s", (0, 3, '00015287')))
+    # print("更新:", execute("update sina set pos_status = %s where number = %s", (int(0), '0' * (8 - len(str("29073"))) + str("29073"))))
     # print("删除:", execute("delete from test_users where id = %s", 4))
     #
     # # 查询
