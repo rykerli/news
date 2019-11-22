@@ -22,18 +22,16 @@ def read_data(path, table, table_type):
     faild = []
     arrays = excel.read_excel_data(path)
 
-    result = []
+#     result = []
     for sheet_n in arrays.keys():
         if arrays[sheet_n]:
             count = 0
             for item in arrays[sheet_n][1:]:
                 pn_word_count = sql.queryone('select pn_word_count from ' + table + ' where number = %s', str('0' * (8 - len(str(item[0]))) + str(item[0])))
-                tmp_result = sql.queryall('select * from ' + table + ' where pn_word_count = ' + pn_word_count + ' and ' + table_type + '_status = 0')
+                tmp_result = sql.queryall('select * from ' + table + ' where pn_word_count = %s and ' + table_type + '_status = 0', pn_word_count)
                 if not tmp_result:
                     count += 1
-                    result.append((int(0), int(count), str('0' * (8 - len(str(item[0]))) + str(item[0]))))
-
-    sql.execute_sql_list('update ' + table + ' set ' + table_type + '_status = %s, order_' + table_type + ' = %s where number = %s ', result)
+                    sql.execute('update ' + table + ' set ' + table_type + '_status = %s, order_' + table_type + ' = %s where number = %s ', (int(0), int(count), str('0' * (8 - len(str(item[0]))) + str(item[0]))))
 
 
 if __name__ == '__main__':

@@ -14,6 +14,7 @@ sys.path.append('../utils')
 import sql_util as sql
 import file_util
 import dir_util
+import xlwt_util
 
 
 finally_result = []
@@ -24,7 +25,7 @@ def ready_data(path, table, table_type):
         print("[{}]--write {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                    table, table_type))
         sina_data_count = 0
-        sina_data = sql.queryall("select number, word_count, post_content_txt, order_pos, order_neg, order_nou from sina where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
+        sina_data = sql.queryall("select number, positive_number, negative_number, word_count, post_content_txt, order_pos, order_neg, order_nou from sina where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
 
         # 清空文件夹并创建
         dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type))
@@ -41,7 +42,7 @@ def ready_data(path, table, table_type):
         print("[{}]--write {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                    table, table_type))
         sohu_data_count = 0
-        sohu_data = sql.queryall("select number, word_count, article_content_txt, order_pos, order_neg, order_nou from sohu where "+ table_type + "_status = 0 and order_" + table_type + " is not null")
+        sohu_data = sql.queryall("select number, positive_number, negative_number, word_count, article_content_txt, order_pos, order_neg, order_nou from sohu where "+ table_type + "_status = 0 and order_" + table_type + " is not null")
 
         # 清空文件夹并创建
         dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type))
@@ -58,7 +59,7 @@ def ready_data(path, table, table_type):
         print("[{}]--write {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                    table, table_type))
         tianya_word_count = 0
-        tianya_data = sql.queryall("select number, word_count, question_detail, order_pos, order_neg, order_nou from tianya where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
+        tianya_data = sql.queryall("select number, positive_number, negative_number, word_count, question_detail, order_pos, order_neg, order_nou from tianya where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
 
         # 清空文件夹并创建
         count = 1
@@ -76,6 +77,11 @@ def write_finally_txt(path):
     for element in finally_result:
         file_util.write_append_file(path, str(element))
         
+
+def export_excel(path, tabel_name, table_type):
+    result_data = sql.queryall("select number, positive_number, negative_number, word_count, order_pos, order_neg, order_nou from " + tabel_name + " where "+ table_type +"_status = 0 and order_" + table_type + " is not null order by order_" + table_type)
+    xlwt_util.writeListData1(result_data, path, table_type)
+    
         
 if __name__ == '__main__':
     ready_data("/home/ftpUser/pub/finally", "sina", "pos")
@@ -92,3 +98,15 @@ if __name__ == '__main__':
     
     file_util.truncate_file(os.path.join('/home/ftpUser/pub/finally', 'finally.txt'))
     write_finally_txt(os.path.join('/home/ftpUser/pub/finally', 'finally.txt'))
+    
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_pos.csv"), "sina", "pos")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_neg.csv"), "sina", "neg")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_nou.csv"), "sina", "nou")
+    
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_pos.csv"), "sina", "pos")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_neg.csv"), "sina", "neg")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_nou.csv"), "sina", "nou")
+    
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_pos.csv"), "sina", "pos")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_neg.csv"), "sina", "neg")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_nou.csv"), "sina", "nou")
