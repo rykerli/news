@@ -18,46 +18,46 @@ jieba.enable_parallel(4)
 
 
 def get_file_path(section, key):
-	conf = cf.ConfigParser()
-	conf.read('../conf/config.cfg')
-	return conf.get(section, key)
+    conf = cf.ConfigParser()
+    conf.read('../conf/config.cfg')
+    return conf.get(section, key)
 
 
 def get_stop_word():
-	with codecs.open(get_file_path('stop_file', 'stop_words_chinese_1'), 'r', encoding='utf8') as f1:
-		data1 = f1.read()
+    with codecs.open(get_file_path('stop_file', 'stop_words_chinese_1'), 'r', encoding='utf8') as f1:
+        data1 = f1.read()
 
-	with codecs.open(get_file_path('stop_file', 'stop_words_english_1'), 'r') as f2:
-		data2 = f2.read()
-	f_stop_list = (data1 + data2).split('\n')
-	return f_stop_list
+    with codecs.open(get_file_path('stop_file', 'stop_words_english_1'), 'r') as f2:
+        data2 = f2.read()
+    f_stop_list = (data1 + data2).split('\n')
+    return f_stop_list
 
 
 def write_file(file_path, content):
-	with codecs.open(file_path, 'w', encoding='utf8') as w:
-		w.write(u" ".join(content))
+    with codecs.open(file_path, 'w', encoding='utf8') as w:
+        w.write(u" ".join(content))
 
 
 def split(stop_lists, data):
-	word_list = []
-	seg_list = jieba.cut(data, cut_all=False)
-	list_str = " ".join(seg_list)
+    word_list = []
+    seg_list = jieba.cut(data, cut_all=False)
+    list_str = " ".join(seg_list)
 
-	for word in list_str.split(" "):
-		if not (word.strip().lower() in stop_lists) \
-				and len(word.strip()) > 1 \
-				and not word.isdigit() \
-				and not re.search('[a-zA-Z]', word) \
-				and '\u4e00' <= word <= '\u9fff':
-			word_list.append(word)
-	for element in word_list:
-		file_util.append_file("/Users/red/Desktop/temp/news/data/sj_data/all_data/all_seg_word_data.txt", element + " ")
+    for word in list_str.split(" "):
+        if not (word.strip().lower() in stop_lists) \
+                and len(word.strip()) > 1 \
+                and not word.isdigit() \
+                and not re.search('[a-zA-Z]', word) \
+                and '\u4e00' <= word <= '\u9fff':
+            word_list.append(word)
+    for element in word_list:
+        file_util.append_file("/Users/red/Desktop/temp/news/data/sj_data/all_data/all_seg_word_data.txt", element + " ")
 
 
 def get_content():
-	return file_util.read_file("/Users/red/Desktop/temp/news/data/sj_data/all_data/article_txt.txt")
+    return file_util.read_file("/Users/red/Desktop/temp/news/data/sj_data/all_data/article_txt.txt")
 
 
 if __name__ == '__main__':
-	stop_word_list = get_stop_word()
-	split(stop_word_list, str(get_content()))
+    stop_word_list = get_stop_word()
+    split(stop_word_list, str(get_content()))

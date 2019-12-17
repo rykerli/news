@@ -20,20 +20,30 @@ import xlwt_util
 finally_result = []
 
 
+# 导出统计积极消极词汇数量信息数据
+def write_file(f_path, word_dict_data):
+    for element in word_dict_data:
+        # print(type(element))
+        if element[1] != 0:
+            file_util.write_append_file(f_path, str(element))
+
+
 def ready_data(path, table, table_type):
     if table == "sina":
         print("[{}]--write {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                    table, table_type))
         sina_data_count = 0
-        sina_data = sql.queryall("select number, positive_number, negative_number, word_count, post_content_txt, order_pos, order_neg, order_nou from sina where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
+        sina_data = sql.queryall("select number, positive_number, negative_number, word_count, pn_word_count, post_content_txt, order_pos, order_neg, order_nou from sina where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
 
         # 清空文件夹并创建
         dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type))
+        dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type + '_attitude_word'))
         # 将数据写入txt文件
         count = 1
         for element in sina_data:
             sina_data_count += element.get('word_count')
             file_util.write_file(os.path.join(path, table, table + "_" + table_type, str(element.get(str('order_' + table_type))) + "-" + element.get('number') + ".txt"), element.get('post_content_txt'))
+            write_file(os.path.join(path, table, table + "_" + table_type + '_attitude_word', str(element.get(str('order_' + table_type))) + "-" + element.get('number') + ".txt"), eval(element.get('pn_word_count')))
             count += 1
         finally_result.append(('sina ' + table_type + ' total word count', sina_data_count))
         print("[{}]--write {}_{} data  end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), table, table_type))
@@ -42,15 +52,17 @@ def ready_data(path, table, table_type):
         print("[{}]--write {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                    table, table_type))
         sohu_data_count = 0
-        sohu_data = sql.queryall("select number, positive_number, negative_number, word_count, article_content_txt, order_pos, order_neg, order_nou from sohu where "+ table_type + "_status = 0 and order_" + table_type + " is not null")
+        sohu_data = sql.queryall("select number, positive_number, negative_number, word_count, pn_word_count, article_content_txt, order_pos, order_neg, order_nou from sohu where "+ table_type + "_status = 0 and order_" + table_type + " is not null")
 
         # 清空文件夹并创建
         dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type))
+        dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type + '_attitude_word'))
         # 将数据写入txt文件
         count = 1
         for element in sohu_data:
             sohu_data_count += element.get('word_count')
             file_util.write_file(os.path.join(path, table, table + "_" + table_type, str(element.get('order_' + table_type)) + "-" + element.get('number') + ".txt"), element.get('article_content_txt'))
+            write_file(os.path.join(path, table, table + "_" + table_type + '_attitude_word', str(element.get(str('order_' + table_type))) + "-" + element.get('number') + ".txt"), eval(element.get('pn_word_count')))
             count += 1
         finally_result.append(('sohu ' + table_type + ' total word count', sohu_data_count))
         print("[{}]--write {}_{} data  end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), table, table_type))
@@ -59,15 +71,17 @@ def ready_data(path, table, table_type):
         print("[{}]--write {}_{} data  start......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                                                                    table, table_type))
         tianya_word_count = 0
-        tianya_data = sql.queryall("select number, positive_number, negative_number, word_count, question_detail, order_pos, order_neg, order_nou from tianya where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
+        tianya_data = sql.queryall("select number, positive_number, negative_number, word_count, pn_word_count, question_detail, order_pos, order_neg, order_nou from tianya where "+ table_type +"_status = 0 and order_" + table_type + " is not null")
 
         # 清空文件夹并创建
         count = 1
         dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type))
+        dir_util.remove_dir(os.path.join(path, table, table + "_" + table_type + '_attitude_word'))
         # 将数据写入txt文件
         for element in tianya_data:
             tianya_word_count += element.get('word_count')
             file_util.write_file(os.path.join(path, table, table + "_" + table_type, str(element.get('order_' + table_type)) + "-" + element.get('number') + ".txt"), element.get('question_detail'))
+            write_file(os.path.join(path, table, table + "_" + table_type + '_attitude_word', str(element.get(str('order_' + table_type))) + "-" + element.get('number') + ".txt"), eval(element.get('pn_word_count')))
             count += 1
         finally_result.append(('tianya ' + table_type + ' total word count', tianya_word_count))
         print("[{}]--write {}_{} data  end......".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), table, table_type))
@@ -99,14 +113,26 @@ if __name__ == '__main__':
     file_util.truncate_file(os.path.join('/home/ftpUser/pub/finally', 'finally.txt'))
     write_finally_txt(os.path.join('/home/ftpUser/pub/finally', 'finally.txt'))
     
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_pos.csv"))
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_neg.csv"))
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_nou.csv"))
+    
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_pos.csv"))
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_neg.csv"))
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_nou.csv"))
+    
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_pos.csv"))
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_neg.csv"))
+    file_util.truncate_file(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_nou.csv"))
+    
     export_excel(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_pos.csv"), "sina", "pos")
     export_excel(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_neg.csv"), "sina", "neg")
     export_excel(os.path.join("/home/ftpUser/pub/finally", "sina", "sina_nou.csv"), "sina", "nou")
     
-    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_pos.csv"), "sina", "pos")
-    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_neg.csv"), "sina", "neg")
-    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_nou.csv"), "sina", "nou")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_pos.csv"), "sohu", "pos")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_neg.csv"), "sohu", "neg")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "sohu", "sohu_nou.csv"), "sohu", "nou")
     
-    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_pos.csv"), "sina", "pos")
-    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_neg.csv"), "sina", "neg")
-    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_nou.csv"), "sina", "nou")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_pos.csv"), "tianya", "pos")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_neg.csv"), "tianya", "neg")
+    export_excel(os.path.join("/home/ftpUser/pub/finally", "tianya", "tianya_nou.csv"), "tianya", "nou")
