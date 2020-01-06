@@ -188,7 +188,7 @@ def execute_sql_list(sql, param=None):
     except Exception as e:
         con.rollback()
         logger.error('事务处理失败, {}'.format(e))
-#         logger.error("[sql]:{} [param]:{}".format(sql, param))
+    #         logger.error("[sql]:{} [param]:{}".format(sql, param))
     else:
         con.commit()
         print('事务处理成功', cur)
@@ -235,13 +235,13 @@ def simple_value(row):
 
 
 if __name__ == '__main__':
-#     pass
+    #     pass
 
-#     result = []
-#     for element in array:
-#         result.append(tuple(element.values()))
-#     print(result)
-#     print("插入数据:", insertmany(sql_str, result))
+    #     result = []
+    #     for element in array:
+    #         result.append(tuple(element.values()))
+    #     print(result)
+    #     print("插入数据:", insertmany(sql_str, result))
     # print("hello everyone!!!")
     #
     # # print("删表:", execute('drop table test'))
@@ -256,9 +256,8 @@ if __name__ == '__main__':
     #         '''
     # print("create table:", execute(sql))
 
-    # 批量插入
-    # sql_str = "insert into test_users(email, password) values (%s, %s)"
-    # sql_str = "insert into origin_data(title, time, content, read_num, user, comment, comment_time, like_num) values (%s, %s, %s, %s, %s, %s, %s, %s)"
+    # 批量插入 sql_str = "insert into test_users(email, password) values (%s, %s)" sql_str = "insert into origin_data(
+    # title, time, content, read_num, user, comment, comment_time, like_num) values (%s, %s, %s, %s, %s, %s, %s, %s)"
     #
     # arrays = [
     #     ("aaa@126.com", "111111"),
@@ -282,9 +281,9 @@ if __name__ == '__main__':
     if not result:
         print('none')
     print(type(result))
-#     print("更新:", execute("update sina set pos_status = %s, order_pos = %s where number = %s", (0, 3, '00015287')))
-    # print("更新:", execute("update sina set pos_status = %s where number = %s", (int(0), '0' * (8 - len(str("29073"))) + str("29073"))))
-    # print("删除:", execute("delete from test_users where id = %s", 4))
+    # print("更新:", execute("update sina set pos_status = %s, order_pos = %s where number = %s", (0, 3, '00015287')))
+    # print("更新:", execute("update sina set pos_status = %s where number = %s", (int(0), '0' * (8 - len(str(
+    # "29073"))) + str("29073")))) print("删除:", execute("delete from test_users where id = %s", 4))
     #
     # # 查询
     # print("再次查询全表:", queryall("select * from test_users"))
