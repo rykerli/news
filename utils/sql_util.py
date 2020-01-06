@@ -184,6 +184,7 @@ def execute_sql_list(sql, param=None):
     try:
         for element in param:
             cnt = cur.execute(str(sql), element)
+            print(cnt)
     except Exception as e:
         con.rollback()
         logger.error('事务处理失败, {}'.format(e))
@@ -277,7 +278,7 @@ if __name__ == '__main__':
     # print("多列:", queryall("select * from test_users where email = %s and password = %s", ("bbb@126.com", "222222")))
     #
     # # 更新|删除
-    result = queryall('select * from sina where number = %s', '0000004')
+    result = queryall('select * from sina where number = %s', '00000001')
     if not result:
         print('none')
     print(type(result))
