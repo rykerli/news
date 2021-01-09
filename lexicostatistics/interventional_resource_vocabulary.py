@@ -58,19 +58,19 @@ def count_word(data, intervention_word):
             if re_data:
                 re_result.extend(re_data)
                 intervention_word_result.append(intervention_word[i])
-        write_html_file(sina["number"], sina["post_content_txt"], re_result)
+        write_html_file(sina["number"], sina["post_content_txt"], re_result, "sina")
         sina_data.extend(
             [
                 ",".join(list(set(intervention_word_result))),
                 len(list(set(intervention_word_result))),
                 len(intervention_word_result),
                 get_status(sina["pos_status"], sina["neg_status"]),
-                "./html_file/{}.html".format(sina["number"]),
+                "sina/{}.html".format(sina["number"]),
             ]
         )
         result.append(sina_data)
     all_data.update({"sina": result})
-
+    result = []
     intervention_word_copy = intervention_word[:]
     for sohu in data["sohu"]:
         sohu_data = [sohu["number"], sohu["article_content_txt"]]
@@ -86,19 +86,19 @@ def count_word(data, intervention_word):
             if re_data:
                 re_result.extend(re_data)
                 intervention_word_result.append(intervention_word[i])
-        write_html_file(sohu["number"], sohu["article_content_txt"], re_result)
+        write_html_file(sohu["number"], sohu["article_content_txt"], re_result, "sohu")
         sohu_data.extend(
             [
                 ",".join(list(set(intervention_word_result))),
                 len(list(set(intervention_word_result))),
                 len(intervention_word_result),
                 get_status(sohu["pos_status"], sohu["neg_status"]),
-                "./html_file/{}.html".format(sohu["number"]),
+                "sohu/{}.html".format(sohu["number"]),
             ]
         )
         result.append(sohu_data)
     all_data.update({"sohu": result})
-
+    result = []
     intervention_word_copy = intervention_word[:]
     for tianya in data["tianya"]:
         tianya_data = [tianya["number"], tianya["question_detail"]]
@@ -114,14 +114,16 @@ def count_word(data, intervention_word):
             if re_data:
                 re_result.extend(re_data)
                 intervention_word_result.append(intervention_word[i])
-        write_html_file(tianya["number"], tianya["question_detail"], re_result)
+        write_html_file(
+            tianya["number"], tianya["question_detail"], re_result, "tianya"
+        )
         tianya_data.extend(
             [
                 ",".join(list(set(intervention_word_result))),
                 len(list(set(intervention_word_result))),
                 len(intervention_word_result),
                 get_status(tianya["pos_status"], tianya["neg_status"]),
-                "./html_file/{}.html".format(tianya["number"]),
+                "tianya/{}.html".format(tianya["number"]),
             ]
         )
         result.append(tianya_data)
@@ -136,7 +138,7 @@ def get_status(pos_status, neg_status):
         return "消极"
 
 
-def write_html_file(number, text, replace_color_text_list):
+def write_html_file(number, text, replace_color_text_list, type):
     for replace_color_text in list(set(replace_color_text_list)):
         text = text.replace(
             replace_color_text, "<span>{}</span>".format(replace_color_text)
@@ -145,25 +147,27 @@ def write_html_file(number, text, replace_color_text_list):
 
     html_text = (
         """
-        <!DOCTYPE HTML>
-            <html>
-            <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-            <title>文件预览</title>
-            <style type="text/css">
-            span{
-               color:red;
-            }
-            </style>
-            </head>
-            <body>
-                %s
-            </body>
-            </html>
-        """
+            <!DOCTYPE HTML>
+                <html>
+                <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                <title>文件预览</title>
+                <style type="text/css">
+                span{
+                   color:red;
+                }
+                </style>
+                </head>
+                <body>
+                    %s
+                </body>
+                </html>
+            """
         % text
     )
-    with open(os.path.join("../resource/data/html_file/", number + ".html"), "w") as w:
+    with open(
+        os.path.join("../resource/data/html_file/" + type + "/", number + ".html"), "w"
+    ) as w:
         w.write(html_text)
 
 
